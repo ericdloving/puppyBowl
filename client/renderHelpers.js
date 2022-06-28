@@ -1,4 +1,4 @@
-import { fetchAllPlayers } from './ajaxHelpers';
+import { fetchAllPlayers, fetchSinglePlayer } from './ajaxHelpers';
 
 const playerContainer = document.getElementById('all-players-container');
 const newPlayerFormContainer = document.getElementById('new-player-form');
@@ -37,9 +37,9 @@ export const renderAllPlayers = (playerList) => {
   for (let i = 0; i < detailButtons.length; i++) {
     const button = detailButtons[i];
     button.addEventListener('click', async () => {
-      /*
-        YOUR CODE HERE
-      */
+      let fetchedPlayer = await fetchSinglePlayer(button.dataset.id)
+      console.log(fetchedPlayer)
+      renderSinglePlayer(fetchedPlayer)
     });
   }
 };
@@ -47,6 +47,7 @@ export const renderAllPlayers = (playerList) => {
 export const renderSinglePlayer = (playerObj) => {
   if (!playerObj || !playerObj.id) {
     playerContainer.innerHTML = "<h3>Couldn't find data for this player!</h3>";
+    
     return;
   }
 
@@ -66,6 +67,13 @@ export const renderSinglePlayer = (playerObj) => {
   `;
 
   playerContainer.innerHTML = pupHTML;
+
+  const backButton = document.getElementById("see-all");
+  backButton.addEventListener("click", async () => {
+    const players = await fetchAllPlayers()
+    renderAllPlayers(players)
+  })
+
 };
 
 export const renderNewPlayerForm = () => {
@@ -82,8 +90,11 @@ export const renderNewPlayerForm = () => {
 
   let form = document.querySelector('#new-player-form > form');
   form.addEventListener('submit', async (event) => {
-    /*
-      YOUR CODE HERE
-    */
+  event.preventDefault;
+  let playerData = {
+    name: form.elements.name.value,
+    breed: form.elements.breed.value
+  }
+
   });
 };
